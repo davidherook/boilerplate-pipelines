@@ -85,8 +85,7 @@ if __name__ == '__main__':
 
     model = pipe.fit(X_train, y_train)
     pickle.dump(model, open('model/model.pk', 'wb'))
-
-
+    
     print('Train R2: {}'.format(model.score(X_train, y_train)))
     print('Test R2: {}'.format(model.score(X_test, y_test)))
     print('\n' + '*'*40 + '\n')
