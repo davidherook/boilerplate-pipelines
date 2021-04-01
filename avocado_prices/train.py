@@ -67,10 +67,10 @@ if __name__ == '__main__':
         ('one hot', OneHotEncoder(handle_unknown='error'))
     ])
 
-    transformer = ColumnTransformer(
-        [('numeric_transformer', numeric_transformer, numeric_features),
-         ('categorical_transformer', categorical_transformer, categorical_features)]
-    )
+    transformer = ColumnTransformer([
+        ('numeric_transformer', numeric_transformer, numeric_features),
+        ('categorical_transformer', categorical_transformer, categorical_features)
+    ])
 
     print('After Transform: {}\n'.format(transformer.fit_transform(X_train).shape))
 
