@@ -16,6 +16,7 @@ class ZipTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
+        assert X.shape[1] == 1
         for i in range(self.zipcode_len):
             new_col = f'{self.feature}_{i}'
             X[new_col] = X[self.feature].apply(lambda x: x[i])
@@ -39,5 +40,9 @@ if __name__ == '__main__':
     df_t = pd.DataFrame(transformer.fit_transform(df))
     print(df_t)
     print(df_t.shape)
+
+    df = pd.DataFrame(data=generate_zip_codes(100), columns=['zip'])
+    print(df)
+    print(pd.DataFrame(transformer.transform(df)))
 
 

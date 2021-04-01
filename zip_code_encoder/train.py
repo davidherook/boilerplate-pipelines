@@ -24,13 +24,14 @@ def generate_zip_codes(n=10):
     return zips
     
 def create_cols(df, col):
+    df1 = df.copy()
     max_value_len = 5
     new_cols = []
     for i in range(max_value_len):
         new_col = f'{col}_{i}'
-        df[new_col] = df[col].apply(lambda x: x[i])
+        df1[new_col] = df1[col].apply(lambda x: x[i])
         new_cols.append(new_col)
-    return df, new_cols
+    return df1, new_cols
 
 
 if __name__ == '__main__':
@@ -44,14 +45,14 @@ if __name__ == '__main__':
     zipcode_transformer0 = Pipeline(steps = [
         ('one hot', OneHotEncoder(handle_unknown='ignore'))
     ])
-    
+
     transformer0 = ColumnTransformer(
         [('zipcode_transformer', zipcode_transformer0, zipcode_features)], 
         remainder='drop',
         sparse_threshold=0
     )
 
-    df_t0 = pd.DataFrame(transformer0.fit_transform(df))
+    df_t0 = pd.DataFrame(transformer0.fit_transform(df1))   # need to use df1
 
     # ====================================
     # Transform using custom transformer
@@ -68,7 +69,17 @@ if __name__ == '__main__':
         sparse_threshold=0
     )
 
-    df_t1 = pd.DataFrame(transformer1.fit_transform(df))
+    df_t1 = pd.DataFrame(transformer1.fit_transform(df))   # use original df because transform is in pipeline
 
     assert df_t1.equals(df_t0)
-    print(df_t1)
+    print(df.head(10))
+    print(df_t1.head(10))
+
+    # ====================================
+    # Transform new zip data with fitted custom transformer
+    # ====================================
+    df2 = pd.DataFrame(data=generate_zip_codes(10), columns=['zip'])
+    print(df2)
+    print(pd.DataFrame(transformer1.transform(df2)))
+
+
