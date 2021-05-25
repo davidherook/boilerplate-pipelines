@@ -1,26 +1,26 @@
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from train import generate_zip_codes
-import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
 class ZipTransformer(BaseEstimator, TransformerMixin):
 
-    zipcode_len = 5
+    def __init__(self, digits=5):
+        self.digits = digits
 
-    def __init__(self, feature):
-        self.feature = feature
+    def split_impute(self, val):
+        return list(str(val))[:self.digits]
 
     def fit(self, X, y=None):
         return self
 
     def transform(self, X, y=None):
-        assert X.shape[1] == 1
-        for i in range(self.zipcode_len):
-            new_col = f'{self.feature}_{i}'
-            X[new_col] = X[self.feature].apply(lambda x: x[i])
-        return X.drop(self.feature, axis=1)
+        X = pd.DataFrame(X)
+        Xt = X.applymap(self.split_impute)
+        Xt = pd.DataFrame([i for i in Xt.iloc[:, 0]])
+        return Xt
 
 
 if __name__ == '__main__':
@@ -28,12 +28,12 @@ if __name__ == '__main__':
     print(df)
 
     zipcode_transformer = Pipeline(steps = [
-        ('zipper', ZipTransformer('zip')),
+        ('zipper', ZipTransformer(digits=5)),
         ('one hot', OneHotEncoder(handle_unknown='ignore'))
     ])
 
     transformer = ColumnTransformer(
-        [('zipcode_transformer', zipcode_transformer, ['zip'])],
+        [('zipcode_transformer', zipcode_transformer, 'zip')],
         sparse_threshold=0
     )
 

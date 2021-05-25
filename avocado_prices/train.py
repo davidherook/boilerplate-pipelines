@@ -1,3 +1,6 @@
+# A simple example of how to use Pipeline to transform features, 
+# train a model, and save that model for later use
+
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -10,21 +13,8 @@ from sklearn.pipeline import Pipeline
 
 data_path = 'data/avocado.csv'
 
-features = [
+numeric_features = [
     'Total Volume', 
-    '4046', 
-    '4225', 
-    '4770',
-    'Total Bags', 
-    'Small Bags', 
-    'Large Bags',
-    'XLarge Bags',
-    'type',
-    'year',
-    'region'
-]
-
-numeric_features = ['Total Volume', 
     '4046', 
     '4225', 
     '4770',
@@ -34,11 +24,13 @@ numeric_features = ['Total Volume',
     'XLarge Bags'
 ]
 
-categorical_features = ['type',
+categorical_features = [
+    'type',
     'year',
     'region'
 ]
 
+features = numeric_features + categorical_features
 target = 'AveragePrice'
 
 

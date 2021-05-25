@@ -60,12 +60,12 @@ if __name__ == '__main__':
     from zip_transformer import ZipTransformer
 
     zipcode_transformer1 = Pipeline(steps = [
-        ('zipper', ZipTransformer('zip')),
+        ('zipper', ZipTransformer(digits=5)),
         ('one hot', OneHotEncoder(handle_unknown='ignore'))
     ])
 
     transformer1 = ColumnTransformer(
-        [('zipcode_transformer', zipcode_transformer1, ['zip'])],
+        [('zipcode_transformer', zipcode_transformer1, 'zip')],
         sparse_threshold=0
     )
 

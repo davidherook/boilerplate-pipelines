@@ -1,3 +1,5 @@
+# Use our trained model to make predictions on unseen data
+
 import pickle
 import pandas as pd
 from train import features, target
